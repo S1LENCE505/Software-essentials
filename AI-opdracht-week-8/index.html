@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Portfolio</title>
+
+  <style>
+    /* ==========================
+       🌈 Algemene stijl
+    =========================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9fafb;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, #007bff, #00c3ff);
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: #0056b3;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+      color: #ffeb3b;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    section {
+      margin-bottom: 60px;
+    }
+
+    h2 {
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    /* ==========================
+       📖 Over mij sectie
+    =========================== */
+    #about {
+      text-align: center;
+    }
+
+    #about img {
+      width: 150px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    /* ==========================
+       💼 Projecten (Grid layout)
+    =========================== */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.3s;
+    }
+
+    .project-card:hover {
+      transform: scale(1.05);
+    }
+
+    /* ==========================
+       ✉️ Contactformulier
+    =========================== */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, textarea, button {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #formMessage {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* ==========================
+       🦶 Footer
+    =========================== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f0f0f0;
+      color: #555;
+    }
+
+    /* ==========================
+       📱 Responsive tweaks
+    =========================== */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================
+       🌟 Header & Navigatie
+  =========================== -->
+  <header>
+    <h1>Mijn Portfolio</h1>
+    <p>Webdeveloper | Front-end Designer | AI Enthusiast</p>
+  </header>
+
+  <nav>
+    <a href="#about">Over mij</a>
+    <a href="#projects">Projecten</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- ==========================
+       📖 Over mij
+  =========================== -->
+  <main>
+    <section id="about">
+      <h2>Over mij</h2>
+      <img src="https://via.placeholder.com/150" alt="Profielfoto">
+      <p>Hallo! Ik ben <strong>Jouw Naam</strong>, een gepassioneerde webdeveloper met een focus op moderne, dynamische websites.
+      Ik gebruik HTML, CSS, JavaScript — en werk graag met AI om slimme functies te integreren.</p>
+    </section>
+
+    <!-- ==========================
+         💼 Projecten (JS dynamisch)
+    =========================== -->
+    <section id="projects">
+      <h2>Projecten</h2>
+      <div class="project-grid" id="projectGrid"></div>
+    </section>
+
+    <!-- ==========================
+         ✉️ Contactformulier
+    =========================== -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <form id="contactForm" method="POST" action="contact.php">
+        <input type="text" id="name" name="name" placeholder="Je naam" required>
+        <input type="email" id="email" name="email" placeholder="Je e-mailadres" required>
+        <textarea id="message" name="message" placeholder="Je bericht" rows="5" required></textarea>
+        <button type="submit">Verzenden</button>
+        <p id="formMessage"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Jouw Naam — Gemaakt met 💙 & AI</p>
+  </footer>
+
+  <script>
+    /* ==========================
+       ⚙️ JavaScript logica
+    =========================== */
+
+    // 💡 1. Dynamisch projecten toevoegen
+    const projects = [
+      { title: "Portfolio Website", description: "Een persoonlijke website met HTML, CSS en JS.", tech: "HTML, CSS, JS" },
+      { title: "ToDo App", description: "Een dynamische takenlijst met localStorage.", tech: "JavaScript, DOM" },
+      { title: "AI Image Generator", description: "Een prototype voor AI-gebaseerde afbeeldingen.", tech: "API, OpenAI" }
+    ];
+
+    const projectGrid = document.getElementById("projectGrid");
+    projects.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "project-card";
+      div.innerHTML = `
+        <h3>${p.title}</h3>
+        <p>${p.description}</p>
+        <small><strong>Technologieën:</strong> ${p.tech}</small>
+      `;
+      projectGrid.appendChild(div);
+    });
+
+    // 💬 2. Simpele form validatie (voor nu in JS, later PHP)
+    const form = document.getElementById("contactForm");
+    const msg = document.getElementById("formMessage");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        msg.textContent = "Vul alle velden in.";
+        msg.style.color = "red";
+        return;
+      }
+
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        msg.textContent = "Voer een geldig e-mailadres in.";
+        msg.style.color = "red";
+        return;
+      }
+
+      msg.textContent = "Bedankt! Je bericht is verzonden (simulatie).";
+      msg.style.color = "green";
+      form.reset();
+    });
+  </script>
+</body>
+</html>
